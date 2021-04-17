@@ -32,6 +32,9 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>com.byril.seabattle2_512x512.ico</ApplicationIcon>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -101,6 +104,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\SI_DSiWare_SeaBattle_image1600w.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="com.byril.seabattle2_512x512.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
