@@ -27,6 +27,11 @@ namespace SeaBattleWinForms
         Button[,] enemyField;
 
 
+        Thread mainThread;
+        Thread myThread1;
+        Thread myThread2;
+
+
         void CreateField(ref Button[,] thisField, int startX, int startY)
         {
             thisField = new Button[SIZE, SIZE];
@@ -76,8 +81,42 @@ namespace SeaBattleWinForms
 
                     thisField[i, j].Location = new Point(startX + (squareSize * (i + 1)), startY + (squareSize * (j + 1)));
                     thisField[i, j].Size = new Size(squareSize, squareSize);
+                    thisField[i, j].BackColor = Color.FromArgb(171, 171, 171);
                     this.Controls.Add(thisField[i, j]);
                 }
+            }
+        }
+
+
+        //Service Method
+        private void UpdateFieldMyField()
+        {
+            while (true)
+            {
+                for (int i = 0; i < SIZE; i++)
+                {
+                    for (int j = 0; j < SIZE; j++)
+                    {
+                        myField[i, j].Update();
+                    }
+                }
+
+                Thread.Sleep(100);
+            }
+        }
+        private void UpdateFieldEnymyField()
+        {
+            while (true)
+            {
+                for (int i = 0; i < SIZE; i++)
+                {
+                    for (int j = 0; j < SIZE; j++)
+                    {
+                        enemyField[i, j].Update();
+                    }
+                }
+
+                Thread.Sleep(100);
             }
         }
 
@@ -87,37 +126,21 @@ namespace SeaBattleWinForms
         BattleField morgan;
 
 
-
-        private void button1_Click(object sender, EventArgs e)
+        //Battle Method
+        private void BattleBot()
         {
-            chuck = new BattleField();
-            morgan = new BattleField();
+            const int FREEZETIME = 750;
 
-            chuck.Placement();
-            morgan.Placement();
+            myThread1 = new Thread(new ThreadStart(UpdateFieldMyField));
+            myThread2 = new Thread(new ThreadStart(UpdateFieldEnymyField));
 
-
-            CreateField(ref myField, 80, 60);
-            CreateField(ref enemyField, 710, 60);
-
-            label1.Visible = true;
-            label2.Visible = true;
+            myThread1.Start();
+            myThread2.Start();
 
 
-            button1.Enabled = false;
-            button1.Visible = false;
+            #region Battle
 
-            button2.Visible = true;
-        }
-
-        private void button2_Click(object sender, EventArgs e)
-        {
-            const int FREEZETIME = 1;
-
-
-            #region MyRegion2
-
-            if (!(chuck.Win || morgan.Win))
+            while (!(chuck.Win || morgan.Win))
             {
 
                 //Отрисовка кораблей
@@ -141,11 +164,6 @@ namespace SeaBattleWinForms
                 }
 
 
-                ////////Fix Bug
-                //Проверка на бистрий виграш
-                if (chuck.Win || morgan.Win) { goto Finihe; }
-
-
                 //Отрисовка кораблей
                 {
                     //корабли и вистрели чака
@@ -154,6 +172,11 @@ namespace SeaBattleWinForms
                     //корабли и вистрели моргана
                     morgan.DrawMyField(chuck, enemyField);
                 }
+
+
+                ////////Fix Bug
+                //Проверка на бистрий виграш
+                if (chuck.Win || morgan.Win) { goto Finihe; }
 
 
                 //Вистрел Моргана по Чаку
@@ -167,7 +190,7 @@ namespace SeaBattleWinForms
                 }
 
 
-                //Shot
+                //Отрисовка кораблей
                 {
                     //корабли и вистрели чака
                     chuck.DrawMyField(morgan, myField);
@@ -177,10 +200,11 @@ namespace SeaBattleWinForms
                 }
             }
 
-        #endregion
+            #endregion
 
 
-        //    Console.WriteLine("Количество ходов " + chuck.countOfMoves);
+            myThread1.Abort();
+            myThread2.Abort();
 
 
         //Виводим результат стражения
@@ -189,12 +213,57 @@ namespace SeaBattleWinForms
             else if (morgan.Win == true) { button2.Visible = false; MessageBox.Show("Bot2 WINS"); }
         }
 
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            chuck = new BattleField();
+            morgan = new BattleField();
+
+            chuck.Placement();
+            morgan.Placement();
+
+
+            CreateField(ref myField, 80, 60);
+            CreateField(ref enemyField, 710, 60);
+
+
+            label1.Visible = true;
+            label2.Visible = true;
+
+
+            button1.Enabled = false;
+            button1.Visible = false;
+
+            button2.Visible = true;
+        }
+        private void button2_Click(object sender, EventArgs e)
+        {
+            button2.Visible = false;
+
+            mainThread = new Thread(new ThreadStart(BattleBot));
+            mainThread.Start();
+        }
         private void button3_Click(object sender, EventArgs e)
         {
+            if (myThread1 != null) { if (myThread1.IsAlive) { myThread1.Abort(); } };
+            if (myThread2 != null) { if (myThread2.IsAlive) { myThread2.Abort(); } };
+
+            if (mainThread != null) { if (mainThread.IsAlive) { mainThread.Abort(); } };
+
             mainForm mainForm = new mainForm();
             mainForm.Show();
             this.Close();
         }
+        private void button4_Click(object sender, EventArgs e)
+        {
+            if (myThread1 != null) { if (myThread1.IsAlive) { myThread1.Abort(); } };
+            if (myThread2 != null) { if (myThread2.IsAlive) { myThread2.Abort(); } };
+
+            if (mainThread != null) { if (mainThread.IsAlive) { mainThread.Abort(); } };
+
+            Application.Exit();
+        }
+
 
 
 
@@ -212,11 +281,6 @@ namespace SeaBattleWinForms
             }
         }
 
-
-        private void button4_Click(object sender, EventArgs e)
-        {
-            Application.Exit();
-        }
 
     }
 }

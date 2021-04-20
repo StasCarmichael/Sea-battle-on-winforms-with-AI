@@ -140,7 +140,7 @@ namespace SeaBattleWinForms
             this.MinimumSize = new System.Drawing.Size(1200, 700);
             this.Name = "MenAndBotForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "MenAndBotForm";
+            this.Text = "Sea Battle";
             this.MouseDown += new System.Windows.Forms.MouseEventHandler(this.MenAndBotForm_MouseDown);
             this.MouseMove += new System.Windows.Forms.MouseEventHandler(this.MenAndBotForm_MouseMove);
             this.ResumeLayout(false);

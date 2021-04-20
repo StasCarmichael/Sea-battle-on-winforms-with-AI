@@ -2,11 +2,11 @@ C:\Users\stask\source\WinForms\SeaBattleWinForms\SeaBattleWinForms\obj\Debug\Sea
 C:\Users\stask\source\WinForms\SeaBattleWinForms\SeaBattleWinForms\obj\Debug\SeaBattleWinForms.Properties.Resources.resources
 C:\Users\stask\source\WinForms\SeaBattleWinForms\SeaBattleWinForms\obj\Debug\SeaBattleWinForms.csproj.GenerateResource.cache
 C:\Users\stask\source\WinForms\SeaBattleWinForms\SeaBattleWinForms\obj\Debug\SeaBattleWinForms.csproj.CoreCompileInputs.cache
-C:\Users\stask\source\WinForms\SeaBattleWinForms\SeaBattleWinForms\bin\Debug\SeaBattleWinForms.exe.config
-C:\Users\stask\source\WinForms\SeaBattleWinForms\SeaBattleWinForms\bin\Debug\SeaBattleWinForms.exe
-C:\Users\stask\source\WinForms\SeaBattleWinForms\SeaBattleWinForms\bin\Debug\SeaBattleWinForms.pdb
-C:\Users\stask\source\WinForms\SeaBattleWinForms\SeaBattleWinForms\obj\Debug\SeaBattleWinForms.exe
-C:\Users\stask\source\WinForms\SeaBattleWinForms\SeaBattleWinForms\obj\Debug\SeaBattleWinForms.pdb
 C:\Users\stask\source\WinForms\SeaBattleWinForms\SeaBattleWinForms\obj\Debug\SeaBattleWinForms.BotForms.resources
 C:\Users\stask\source\WinForms\SeaBattleWinForms\SeaBattleWinForms\obj\Debug\SeaBattleWinForms.mainForm.resources
 C:\Users\stask\source\WinForms\SeaBattleWinForms\SeaBattleWinForms\obj\Debug\SeaBattleWinForms.MenAndBotForm.resources
+C:\Users\stask\source\WinForms\SeaBattleWinForms\SeaBattleWinForms\bin\Debug\Sea Battle WinForms.exe.config
+C:\Users\stask\source\WinForms\SeaBattleWinForms\SeaBattleWinForms\bin\Debug\Sea Battle WinForms.exe
+C:\Users\stask\source\WinForms\SeaBattleWinForms\SeaBattleWinForms\bin\Debug\Sea Battle WinForms.pdb
+C:\Users\stask\source\WinForms\SeaBattleWinForms\SeaBattleWinForms\obj\Debug\Sea Battle WinForms.exe
+C:\Users\stask\source\WinForms\SeaBattleWinForms\SeaBattleWinForms\obj\Debug\Sea Battle WinForms.pdb

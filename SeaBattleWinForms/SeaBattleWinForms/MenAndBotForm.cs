@@ -13,10 +13,9 @@ namespace SeaBattleWinForms
 {
     public partial class MenAndBotForm : Form
     {
-        const int SIZE = 10;
-        const int squareSize = 38;
-
-        const int FREEZETIME = 10;
+        const int FIELD_SIZE = 10;
+        const int SQUARE_SIZE = 38;
+        const int FREEZE_TIME = 700;
 
 
         bool start = false;
@@ -28,20 +27,16 @@ namespace SeaBattleWinForms
         }
 
 
-
-        delegate void CustomDelegate(BattleField bot, Button[,] WindEnemyField);
-
-
-
         Button[,] myField;
         Button[,] enemyField;
 
+
         void CreateField(ref Button[,] thisField, int startX, int startY)
         {
-            thisField = new Button[SIZE, SIZE];
+            thisField = new Button[FIELD_SIZE, FIELD_SIZE];
 
             //Верхняя линия
-            for (int i = 0; i < SIZE + 1; i++)
+            for (int i = 0; i < FIELD_SIZE + 1; i++)
             {
                 string str = "АБВГДЕЄЖЗИ";
 
@@ -52,8 +47,8 @@ namespace SeaBattleWinForms
                     button.Font = new Font(button.Font.FontFamily, 12, FontStyle.Bold);
                 }
 
-                button.Location = new Point(startX + (squareSize * i), startY);
-                button.Size = new Size(squareSize, squareSize);
+                button.Location = new Point(startX + (SQUARE_SIZE * i), startY);
+                button.Size = new Size(SQUARE_SIZE, SQUARE_SIZE);
                 button.BackColor = Color.Gray;
                 button.Enabled = false;
                 this.Controls.Add(button);
@@ -61,15 +56,15 @@ namespace SeaBattleWinForms
 
 
             //Нижняя линия
-            for (int i = 0; i < SIZE; i++)
+            for (int i = 0; i < FIELD_SIZE; i++)
             {
                 Button button = new Button();
 
                 button.Text = Convert.ToString(i + 1);
                 button.Font = new Font(button.Font.FontFamily, 12, FontStyle.Bold);
 
-                button.Location = new Point(startX, startY + (squareSize * (i + 1)));
-                button.Size = new Size(squareSize, squareSize);
+                button.Location = new Point(startX, startY + (SQUARE_SIZE * (i + 1)));
+                button.Size = new Size(SQUARE_SIZE, SQUARE_SIZE);
                 button.BackColor = Color.Gray;
                 button.Enabled = false;
                 this.Controls.Add(button);
@@ -77,14 +72,14 @@ namespace SeaBattleWinForms
 
 
             //создания матрици
-            for (int i = 0; i < SIZE; i++)
+            for (int i = 0; i < FIELD_SIZE; i++)
             {
-                for (int j = 0; j < SIZE; j++)
+                for (int j = 0; j < FIELD_SIZE; j++)
                 {
                     thisField[i, j] = new Button();
 
-                    thisField[i, j].Location = new Point(startX + (squareSize * (i + 1)), startY + (squareSize * (j + 1)));
-                    thisField[i, j].Size = new Size(squareSize, squareSize);
+                    thisField[i, j].Location = new Point(startX + (SQUARE_SIZE * (i + 1)), startY + (SQUARE_SIZE * (j + 1)));
+                    thisField[i, j].Size = new Size(SQUARE_SIZE, SQUARE_SIZE);
                     thisField[i, j].Click += new EventHandler(DetectShip);
                     this.Controls.Add(thisField[i, j]);
                 }
@@ -96,7 +91,6 @@ namespace SeaBattleWinForms
             {
                 for (int j = 0; j < thisField.GetLength(0); j++)
                 {
-                    thisField[i, j].Enabled = true;
                     thisField[i, j].Visible = true;
                     thisField[i, j].Text = string.Empty;
                     thisField[i, j].BackColor = Color.Transparent;
@@ -125,12 +119,102 @@ namespace SeaBattleWinForms
         }
 
 
+        //Service Method
+        private void UpdateFieldMyField()
+        {
+
+            for (int i = 0; i < FIELD_SIZE; i++)
+            {
+                for (int j = 0; j < FIELD_SIZE; j++)
+                {
+                    myField[i, j].Update();
+                }
+            }
+
+        }
+        private void UpdateFieldEnymyField()
+        {
+            for (int i = 0; i < FIELD_SIZE; i++)
+            {
+                for (int j = 0; j < FIELD_SIZE; j++)
+                {
+                    enemyField[i, j].Update();
+                }
+            }
+        }
 
 
         BattleField bot;
         BattleField player;
 
-        private void button1_Click(object sender, EventArgs e)
+
+
+        //Обработчик собитий на кнопку
+        public void DetectShip(object sender, EventArgs e)
+        {
+            Button pressedButton = sender as Button;
+
+
+            if (start)
+            {
+                if (!(bot.Win || player.Win))
+                {
+                    int x = ((pressedButton.Location.X - 710) / SQUARE_SIZE) - 1;
+                    int y = ((pressedButton.Location.Y - 60) / SQUARE_SIZE) - 1;
+
+
+                    int myResult = player.ShotMan(bot, x, y);
+
+
+                    player.DrawEnemyField(bot, enemyField);
+                    player.DrawMyField(bot, myField);
+
+
+                    if (myResult == (int)eOptionShots.missed)
+                    {
+                        //Вистрел бота
+                        while (bot.ShotBot(player, FREEZE_TIME))
+                        {
+                            player.DrawEnemyField(bot, enemyField);
+                            player.DrawMyField(bot, myField);
+
+
+                            UpdateFieldMyField();
+                        }
+
+                    }
+
+                    player.DrawEnemyField(bot, enemyField);
+                    player.DrawMyField(bot, myField);
+
+
+                    UpdateFieldMyField();
+                }
+                else
+                {
+                    if (bot.Win == true)
+                    {
+                        MessageBox.Show("YOU LOSE !!!");
+                        BlokField(ref enemyField);
+                        bot.DrawShips(enemyField);
+
+                        button5.Visible = true;
+                    }
+                    else if (player.Win == true)
+                    {
+                        MessageBox.Show("YOU WIN !!!");
+                        BlokField(ref enemyField);
+                        bot.DrawShips(enemyField);
+
+                        button5.Visible = true;
+                    }
+                }
+            }
+        }
+
+
+        //Main Service Method
+        private void FullPlacement()
         {
             if (bot == null && player == null)
             {
@@ -155,80 +239,25 @@ namespace SeaBattleWinForms
 
             button2.Visible = true;
 
+
             label1.Visible = true;
             label2.Visible = true;
         }
 
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            FullPlacement();
+        }
         private void button2_Click(object sender, EventArgs e)
         {
             UnLockField(ref enemyField);
 
             button1.Visible = false;
+            button2.Visible = false;
 
             start = true;
-
-            button2.Visible = false;
         }
-
-
-
-        //Обработчик собитий на кнопку
-        public void DetectShip(object sender, EventArgs e)
-        {
-
-            Button pressedButton = sender as Button;
-            if (start)
-            {
-                if (!(bot.Win || player.Win))
-                {
-                    int x = ((pressedButton.Location.X - 710) / squareSize) - 1;
-                    int y = ((pressedButton.Location.Y - 60) / squareSize) - 1;
-
-
-                    int myResult = player.ShotMan(bot, x, y);
-
-
-                    player.DrawEnemyField(bot, enemyField);
-                    player.DrawMyField(bot, myField);
-
-
-                    if (myResult == (int)eOptionShots.missed)
-                    {
-                        //Вистрел бота
-                        while (bot.ShotBot(player, FREEZETIME))
-                        {
-                            player.DrawEnemyField(bot, enemyField);
-                            player.DrawMyField(bot, myField);
-                        }
-                    }
-                }
-
-
-                player.DrawEnemyField(bot, enemyField);
-                player.DrawMyField(bot, myField);
-
-
-                if (bot.Win == true)
-                {
-                    MessageBox.Show("YOU LOSE !!!");
-                    BlokField(ref enemyField);
-                    bot.DrawShips(enemyField);
-
-                    button5.Visible = true;
-                }
-                else if (player.Win == true)
-                {
-                    MessageBox.Show("YOU WIN !!!");
-                    BlokField(ref enemyField);
-                    bot.DrawShips(enemyField);
-
-                    button5.Visible = true;
-                }
-            }
-        }
-
-
-
         private void button3_Click(object sender, EventArgs e)
         {
             mainForm form = new mainForm();
@@ -239,7 +268,22 @@ namespace SeaBattleWinForms
         {
             Application.Exit();
         }
+        private void button5_Click(object sender, EventArgs e)
+        {
+            bot = new BattleField();
+            player = new BattleField();
 
+            button1.Visible = true;
+
+
+            ClearField(ref myField);
+            ClearField(ref enemyField);
+
+            BlokField(ref myField);
+            BlokField(ref enemyField);
+
+            button5.Visible = false;
+        }
 
 
 
@@ -257,21 +301,6 @@ namespace SeaBattleWinForms
             }
         }
 
-        private void button5_Click(object sender, EventArgs e)
-        {
-            bot = new BattleField();
-            player = new BattleField();
 
-            button1.Visible = true;
-
-
-            ClearField(ref myField);
-            ClearField(ref enemyField);
-
-            BlokField(ref myField);
-            BlokField(ref enemyField);
-
-            button5.Visible = false;
-        }
     }
 }

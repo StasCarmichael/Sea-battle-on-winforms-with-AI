@@ -1,6 +1,3 @@
-C:\Users\stask\source\WinForms\SeaBattleWinForms\SeaBattleWinForms\bin\Release\SeaBattleWinForms.exe.config
-C:\Users\stask\source\WinForms\SeaBattleWinForms\SeaBattleWinForms\bin\Release\SeaBattleWinForms.exe
-C:\Users\stask\source\WinForms\SeaBattleWinForms\SeaBattleWinForms\bin\Release\SeaBattleWinForms.pdb
 C:\Users\stask\source\WinForms\SeaBattleWinForms\SeaBattleWinForms\obj\Release\SeaBattleWinForms.csprojAssemblyReference.cache
 C:\Users\stask\source\WinForms\SeaBattleWinForms\SeaBattleWinForms\obj\Release\SeaBattleWinForms.BotForms.resources
 C:\Users\stask\source\WinForms\SeaBattleWinForms\SeaBattleWinForms\obj\Release\SeaBattleWinForms.mainForm.resources
@@ -8,5 +5,8 @@ C:\Users\stask\source\WinForms\SeaBattleWinForms\SeaBattleWinForms\obj\Release\S
 C:\Users\stask\source\WinForms\SeaBattleWinForms\SeaBattleWinForms\obj\Release\SeaBattleWinForms.Properties.Resources.resources
 C:\Users\stask\source\WinForms\SeaBattleWinForms\SeaBattleWinForms\obj\Release\SeaBattleWinForms.csproj.GenerateResource.cache
 C:\Users\stask\source\WinForms\SeaBattleWinForms\SeaBattleWinForms\obj\Release\SeaBattleWinForms.csproj.CoreCompileInputs.cache
-C:\Users\stask\source\WinForms\SeaBattleWinForms\SeaBattleWinForms\obj\Release\SeaBattleWinForms.exe
-C:\Users\stask\source\WinForms\SeaBattleWinForms\SeaBattleWinForms\obj\Release\SeaBattleWinForms.pdb
+C:\Users\stask\source\WinForms\SeaBattleWinForms\SeaBattleWinForms\bin\Release\Sea Battle WinForms.exe.config
+C:\Users\stask\source\WinForms\SeaBattleWinForms\SeaBattleWinForms\bin\Release\Sea Battle WinForms.exe
+C:\Users\stask\source\WinForms\SeaBattleWinForms\SeaBattleWinForms\bin\Release\Sea Battle WinForms.pdb
+C:\Users\stask\source\WinForms\SeaBattleWinForms\SeaBattleWinForms\obj\Release\Sea Battle WinForms.exe
+C:\Users\stask\source\WinForms\SeaBattleWinForms\SeaBattleWinForms\obj\Release\Sea Battle WinForms.pdb

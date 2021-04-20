@@ -7,7 +7,7 @@
     <ProjectGuid>{111517A9-16BF-4F4C-9B37-FFB352F208BF}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <RootNamespace>SeaBattleWinForms</RootNamespace>
-    <AssemblyName>SeaBattleWinForms</AssemblyName>
+    <AssemblyName>Sea Battle WinForms</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
