@@ -20,16 +20,24 @@ namespace SeaBattleWinForms
 
     class BattleField
     {
+        public const int COUNT_OF_SHIP = 10;
+        public const int SIZE_X = 10;
+        public const int SIZE_Y = 10;
+
+
+
+
         #region ShipClass
 
-        class BaseShip
+        abstract class BaseShip
         {
             public struct Deck
             {
-                public int x;
-                public int y;
+                public int X { get; set; }
+                public int Y { get; set; }
 
                 public bool Alive;
+
             }
 
             public Deck[] decks;
@@ -40,7 +48,7 @@ namespace SeaBattleWinForms
 
         class FourDeckShip : BaseShip
         {
-            public int SIZE = 4;
+            public readonly int SIZE = 4;
 
             public FourDeckShip()
             {
@@ -50,7 +58,7 @@ namespace SeaBattleWinForms
         }
         class ThreeDeckShip : BaseShip
         {
-            public int SIZE = 3;
+            public readonly int SIZE = 3;
 
             public ThreeDeckShip()
             {
@@ -60,7 +68,7 @@ namespace SeaBattleWinForms
         }
         class DoubleDeckShip : BaseShip
         {
-            public int SIZE = 2;
+            public readonly int SIZE = 2;
 
             public DoubleDeckShip()
             {
@@ -70,7 +78,7 @@ namespace SeaBattleWinForms
         }
         class SingleDeckShip : BaseShip
         {
-            public int SIZE = 1;
+            public readonly int SIZE = 1;
 
             public SingleDeckShip()
             {
@@ -80,17 +88,7 @@ namespace SeaBattleWinForms
         }
         #endregion
 
-
-        //Size
-        private const int SizeX = 10;
-        private const int SizeY = 10;
-
-        //Public information
-        public bool Win;
-        public int countOfMoves;
-
-
-        //Logic AI
+        #region AI
         private struct AI
         {
             public bool currentShip;
@@ -108,11 +106,251 @@ namespace SeaBattleWinForms
 
             public List<eDirection> invalidDirection;
         }
+        #endregion
+
+        #region ManPlacement
+
+        private class ManPlacement
+        {
+            private readonly Color DETECTION_COLOR;
+            private BaseShip[] ships;
+            private bool[,] reserveMatrix;
+            List<KeyValuePair<int, int>> tempShip;
+
+            public ManPlacement(Color detectionsСolor)
+            {
+                DETECTION_COLOR = detectionsСolor;
+
+
+                ships = new BaseShip[COUNT_OF_SHIP];
+
+                ships[0] = new FourDeckShip();
+                ships[1] = new ThreeDeckShip();
+                ships[2] = new ThreeDeckShip();
+                ships[3] = new DoubleDeckShip();
+                ships[4] = new DoubleDeckShip();
+                ships[5] = new DoubleDeckShip();
+                ships[6] = new SingleDeckShip();
+                ships[7] = new SingleDeckShip();
+                ships[8] = new SingleDeckShip();
+                ships[9] = new SingleDeckShip();
+
+
+                reserveMatrix = new bool[SIZE_X, SIZE_Y];
+
+
+                for (int ship = 0; ship < ships.Length; ship++)
+                {
+                    for (int deck = 0; deck < ships[ship].decks.Length; deck++)
+                    {
+                        ships[ship].decks[deck].X = -1;
+                        ships[ship].decks[deck].Y = -1;
+                    }
+                }
+
+            }
+
+
+            public bool TryPlacement(ref Button[,] thisField, ref BaseShip[] otherShips )
+            {
+                bool check = true;
+
+                int thisDeck = 0;
+                int maxDeck = 0;
+
+
+                for (int x = 0; x < thisField.GetLength(0); x++)
+                {
+                    for (int y = 0; y < thisField.GetLength(1); y++)
+                    {
+                        if (thisField[x, y].BackColor == DETECTION_COLOR) { thisDeck++; }
+                    }
+                }
+
+                for (int i = 0; i < ships.Length; i++)
+                {
+                    maxDeck += ships[i].decks.Length;
+                }
+
+
+                //Если мах НЕ равняєиса количество кораблей равняєтса текущему
+                if (thisDeck != maxDeck) { return false; }
+
+
+                if (thisDeck == maxDeck)
+                {
+
+                    while (check)
+                    {
+                        check = false;
+                        for (int x = 0; x < SIZE_X; x++)
+                        {
+                            for (int y = 0; y < SIZE_Y; y++)
+                            {
+                                if (thisField[x, y].BackColor == DETECTION_COLOR)
+                                {
+                                    //Если кординати есть корблем
+                                    if (CheckShipCoordinate(x, y)) { }
+                                    else
+                                    {
+                                        check = true;
+
+                                        //НЕ есть кораблем и зарезервированая
+                                        if (reserveMatrix[x, y] == true) { return false; }
+                                        else
+                                        {
+                                            //Добавить и создать корбль
+                                            if (AddShip(thisField, x, y)) { }
+                                            else
+                                            {
+                                                return false;
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                }
+
+
+                //Сделать все корабли живеє
+                for (int ship = 0; ship < ships.Length; ship++)
+                {
+                    ships[ship].Alive = true;
+                }
+
+
+                otherShips = ships;
+                return true;
+            }
+
+
+            //Добавить кординати вистрела в наши даниє
+            private void AddUsingCoordinate(int x, int y)
+            {
+                if (!(x < 10 && x >= 0 && y < 10 && y >= 0)) { return; }
+
+                reserveMatrix[x, y] = true;
+            }
+            private void AddShotCoordinatesShip(int currShip)
+            {
+                for (int i = 0; i < ships[currShip].decks.Length; i++)
+                {
+                    // вспомогательние координати
+                    AddUsingCoordinate(ships[currShip].decks[i].X, ships[currShip].decks[i].Y);
+
+                    AddUsingCoordinate(ships[currShip].decks[i].X + 1, ships[currShip].decks[i].Y);
+
+                    AddUsingCoordinate(ships[currShip].decks[i].X - 1, ships[currShip].decks[i].Y);
+
+                    AddUsingCoordinate(ships[currShip].decks[i].X, ships[currShip].decks[i].Y + 1);
+
+                    AddUsingCoordinate(ships[currShip].decks[i].X, ships[currShip].decks[i].Y - 1);
+
+                    AddUsingCoordinate(ships[currShip].decks[i].X + 1, ships[currShip].decks[i].Y + 1);
+
+                    AddUsingCoordinate(ships[currShip].decks[i].X + 1, ships[currShip].decks[i].Y - 1);
+
+                    AddUsingCoordinate(ships[currShip].decks[i].X - 1, ships[currShip].decks[i].Y + 1);
+
+                    AddUsingCoordinate(ships[currShip].decks[i].X - 1, ships[currShip].decks[i].Y - 1);
+                }
+            }
+            private bool CheckShipCoordinate(int x, int y)
+            {
+                for (int ship = 0; ship < ships.Length; ship++)
+                {
+                    for (int deck = 0; deck < ships[ship].decks.Length; deck++)
+                    {
+                        if (x == ships[ship].decks[deck].X && y == ships[ship].decks[deck].Y)
+                        {
+                            return true;
+                        }
+                    }
+                }
+
+                return false;
+            }
+            private bool AddShip(Button[,] thisField, int _x, int _y)
+            {
+                bool check = true;
+
+                tempShip = new List<KeyValuePair<int, int>>();
+                tempShip.Add(new KeyValuePair<int, int>(_x, _y));
+
+                int x = _x;
+                int y = _y;
+
+
+
+                if (y + 1 < 10 && thisField[x, y + 1].BackColor == DETECTION_COLOR)
+                {
+                    while (check)
+                    {
+                        check = false;
+                        if (y + 1 < 10 && thisField[x, y + 1].BackColor == DETECTION_COLOR)
+                        {
+                            y++;
+
+                            tempShip.Add(new KeyValuePair<int, int>(x, y));
+                            check = true;
+                        }
+                    }
+
+                }
+                else if (x + 1 < 10 && thisField[x + 1, y].BackColor == DETECTION_COLOR)
+                {
+                    while (check)
+                    {
+                        check = false;
+                        if (x + 1 < 10 && thisField[x + 1, y].BackColor == Color.Red)
+                        {
+                            x++;
+
+                            tempShip.Add(new KeyValuePair<int, int>(x, y));
+                            check = true;
+                        }
+                    }
+                }
+
+
+
+
+                for (int ship = 0; ship < ships.Length; ship++)
+                {
+                    if (ships[ship].decks.Length == tempShip.Count && ships[ship].Alive == true)
+                    {
+                        AddShotCoordinatesShip(ship);
+                        ships[ship].Alive = false;
+
+
+                        for (int deck = 0; deck < ships[ship].decks.Length; deck++)
+                        {
+                            ships[ship].decks[deck].X = tempShip[deck].Key;
+                            ships[ship].decks[deck].Y = tempShip[deck].Value;
+                        }
+
+                        return true;
+                    }
+                }
+
+                return false;
+            }
+        }
+
+        #endregion
+
+
+        //Public information
+        public bool Win { get; private set; }
+        public int countOfMoves { get; private set; }
+
+
+        //Logic AI and Man Placment
         private AI aI = new AI();
-
-
-        //information about reserved coordinates
-        private bool[,] reserved;
+        private ManPlacement manPlacement;
 
 
         //information about the coordinates of the shots
@@ -122,6 +360,7 @@ namespace SeaBattleWinForms
         //information about the ALL coordinates
         private int[,] myField;
         private int[,] enemyField;
+        private bool[,] myShipsField;
 
 
         //information about the coordinates of the ship
@@ -135,7 +374,7 @@ namespace SeaBattleWinForms
         //ctor
         public BattleField()
         {
-            ships = new BaseShip[10];
+            ships = new BaseShip[COUNT_OF_SHIP];
 
             ships[0] = new FourDeckShip();
             ships[1] = new ThreeDeckShip();
@@ -150,110 +389,23 @@ namespace SeaBattleWinForms
 
 
 
+            //AI
             aI.currentShip = false;
             aI.invalidDirection = new List<eDirection>();
-            aI.repeatShots = 20000;
+            aI.repeatShots = 3000;
+
 
             Win = false;
             countOfMoves = 0;
 
             //initialize array
-            reserved = new bool[SizeX, SizeY];
-            myShot = new bool[SizeX, SizeY];
-            myField = new int[SizeX, SizeY];
-            enemyField = new int[SizeX, SizeY];
+            myShot = new bool[SIZE_X, SIZE_Y];
+
+            myField = new int[SIZE_X, SIZE_Y];
+            enemyField = new int[SIZE_X, SIZE_Y];
+            myShipsField = new bool[SIZE_X, SIZE_Y];
 
             botStates = (int)eBotShots.missed;
-        }
-
-
-
-
-
-        //Рисуем попадания по нам + наши все корабли включая вибитии
-        public void DrawMyField(BattleField bot, Button[,] WindMyField)
-        {
-            //Записать дание в матрицу
-            AddFullOnMyMatrix(bot);
-
-            //Нарисовать корабли
-            for (int x = 0; x < SizeX; x++)
-            {
-                for (int y = 0; y < SizeY; y++)
-                {
-                    if (myField[x, y] == (int)eStatus.destroyed)
-                    {
-                        WindMyField[x, y].Text = "X";
-                        WindMyField[x, y].ForeColor = Color.Black;
-                        WindMyField[x, y].BackColor = Color.Red;
-                        WindMyField[x, y].Enabled = false;
-                    }
-                    else if (myField[x, y] == (int)eStatus.reserved)
-                    {
-                        WindMyField[x, y].Text = "#";
-                        WindMyField[x, y].ForeColor = Color.Black;
-                        WindMyField[x, y].BackColor = Color.Green;
-                    }
-                    else if (myField[x, y] == (int)eStatus.shooted)
-                    {
-                        WindMyField[x, y].ForeColor = Color.White;
-                        WindMyField[x, y].BackColor = Color.Blue;
-                        WindMyField[x, y].Enabled = false;
-                    }
-
-                    WindMyField[x, y].Font = new Font(WindMyField[x, y].Font.FontFamily, 14, FontStyle.Bold);
-                }
-            }
-        }
-
-        //Рисуем наши попадания и вибитие кораблики bota
-        public void DrawEnemyField(BattleField bot, Button[,] WindEnemyField)
-        {
-            //Записать данние в матрицу
-            AddFullOnEnemyMatrix(bot);
-
-            //Нарисовать корабли
-            for (int x = 0; x < SizeX; x++)
-            {
-                for (int y = 0; y < SizeY; y++)
-                {
-                    if (enemyField[x, y] == (int)eStatus.destroyed)
-                    {
-                        WindEnemyField[x, y].Text = "X";
-                        WindEnemyField[x, y].ForeColor = Color.Black;
-                        WindEnemyField[x, y].BackColor = Color.Red;
-                        WindEnemyField[x, y].Enabled = false;
-                    }
-                    else if (enemyField[x, y] == (int)eStatus.shooted)
-                    {
-                        WindEnemyField[x, y].ForeColor = Color.Black;
-                        WindEnemyField[x, y].BackColor = Color.Blue;
-                        WindEnemyField[x, y].Enabled = false;
-                    }
-                    WindEnemyField[x, y].Font = new Font(WindEnemyField[x, y].Font.FontFamily, 14, FontStyle.Bold);
-                }
-            }
-        }
-
-
-        //Draw Alieu ships
-        public void DrawShips(Button[,] thisField)
-        {
-
-            // Живие коробли
-            for (int ship = 0; ship < ships.Length; ship++)
-            {
-                for (int deck = 0; deck < ships[ship].decks.Length; deck++)
-                {
-                    int x = ships[ship].decks[deck].x;
-                    int y = ships[ship].decks[deck].y;
-
-                    thisField[x, y].Text = "#";
-                    thisField[x, y].ForeColor = Color.Black;
-                    thisField[x, y].BackColor = Color.Green;
-                    thisField[x, y].Font = new Font(thisField[x, y].Font.FontFamily, 14, FontStyle.Bold);
-                }
-            }
         }
 
 
@@ -301,9 +453,9 @@ namespace SeaBattleWinForms
                 {
                     WreckedShipCheck(bot);
                     if (Win == true) { return false; }
-                    for (int x = 0; x < SizeX; x++)
+                    for (int x = 0; x < SIZE_X; x++)
                     {
-                        for (int y = 0; y < SizeY; y++)
+                        for (int y = 0; y < SIZE_Y; y++)
                         {
                             if (CheckNegative(x, y))
                             {
@@ -394,9 +546,9 @@ namespace SeaBattleWinForms
                 {
                     WreckedShipCheck(bot);
                     if (Win == true) { return false; }
-                    for (int x = 0; x < SizeX; x++)
+                    for (int x = 0; x < SIZE_X; x++)
                     {
-                        for (int y = 0; y < SizeY; y++)
+                        for (int y = 0; y < SIZE_Y; y++)
                         {
                             if (CheckNegative(x, y))
                             {
@@ -777,17 +929,9 @@ namespace SeaBattleWinForms
 
 
         //placement of ships on the battle field
-        public void Placement()
+        public void AutoPlacement()
         {
-            //clear data
-            for (int i = 0; i < reserved.GetLength(0); i++)
-            {
-                for (int j = 0; j < reserved.GetLength(1); j++)
-                {
-                    reserved[i, j] = false;
-                }
-            }
-
+            bool[,] reserved = new bool[SIZE_X, SIZE_Y];
 
 
             for (int ship = 0; ship < ships.Length; ship++)
@@ -806,7 +950,7 @@ namespace SeaBattleWinForms
 
 
                 // Проверка на резервирование поля
-                if (CheckReserveCordinate(tempX, tempY) == false) { goto Again; }
+                if (CheckReserveCordinate(ref reserved, tempX, tempY) == false) { goto Again; }
 
 
 
@@ -814,8 +958,8 @@ namespace SeaBattleWinForms
                 {
                     if (deck == 0)
                     {
-                        ships[ship].decks[deck].x = tempX;
-                        ships[ship].decks[deck].y = tempY;
+                        ships[ship].decks[deck].X = tempX;
+                        ships[ship].decks[deck].Y = tempY;
                     }
                     else
                     {
@@ -835,11 +979,11 @@ namespace SeaBattleWinForms
                                 break;
                         }
 
-                        if (CheckReserveCordinate(tempX, tempY) == false) { goto Again; }
+                        if (CheckReserveCordinate(ref reserved, tempX, tempY) == false) { goto Again; }
                         else
                         {
-                            ships[ship].decks[deck].x = tempX;
-                            ships[ship].decks[deck].y = tempY;
+                            ships[ship].decks[deck].X = tempX;
+                            ships[ship].decks[deck].Y = tempY;
                         }
                     }
                 }
@@ -848,36 +992,42 @@ namespace SeaBattleWinForms
                 for (int deck = 0; deck < ships[ship].decks.Length; deck++)
                 {
                     // корабль
-                    AddReserveCordinate(ships[ship].decks[deck].x, ships[ship].decks[deck].y);
+                    AddReserveCordinate(ref reserved, ships[ship].decks[deck].X, ships[ship].decks[deck].Y);
 
 
                     // вспомогательние координати
-                    AddReserveCordinate(ships[ship].decks[deck].x + 1, ships[ship].decks[deck].y);
+                    AddReserveCordinate(ref reserved, ships[ship].decks[deck].X + 1, ships[ship].decks[deck].Y);
 
-                    AddReserveCordinate(ships[ship].decks[deck].x - 1, ships[ship].decks[deck].y);
+                    AddReserveCordinate(ref reserved, ships[ship].decks[deck].X - 1, ships[ship].decks[deck].Y);
 
-                    AddReserveCordinate(ships[ship].decks[deck].x, ships[ship].decks[deck].y + 1);
+                    AddReserveCordinate(ref reserved, ships[ship].decks[deck].X, ships[ship].decks[deck].Y + 1);
 
-                    AddReserveCordinate(ships[ship].decks[deck].x, ships[ship].decks[deck].y - 1);
+                    AddReserveCordinate(ref reserved, ships[ship].decks[deck].X, ships[ship].decks[deck].Y - 1);
 
-                    AddReserveCordinate(ships[ship].decks[deck].x + 1, ships[ship].decks[deck].y + 1);
+                    AddReserveCordinate(ref reserved, ships[ship].decks[deck].X + 1, ships[ship].decks[deck].Y + 1);
 
-                    AddReserveCordinate(ships[ship].decks[deck].x + 1, ships[ship].decks[deck].y - 1);
+                    AddReserveCordinate(ref reserved, ships[ship].decks[deck].X + 1, ships[ship].decks[deck].Y - 1);
 
-                    AddReserveCordinate(ships[ship].decks[deck].x - 1, ships[ship].decks[deck].y + 1);
+                    AddReserveCordinate(ref reserved, ships[ship].decks[deck].X - 1, ships[ship].decks[deck].Y + 1);
 
-                    AddReserveCordinate(ships[ship].decks[deck].x - 1, ships[ship].decks[deck].y - 1);
+                    AddReserveCordinate(ref reserved, ships[ship].decks[deck].X - 1, ships[ship].decks[deck].Y - 1);
 
                 }
 
             }
+        }
+        public bool HumanPlacement(ref Button[,] thisField , Color detectionsСolor)
+        {
+            //Human Placement
+            manPlacement = new ManPlacement(detectionsСolor);
 
+            return manPlacement.TryPlacement(ref thisField, ref ships);
         }
 
 
 
         //Занести корабли на матрицу 
-        private void AddFullOnMyMatrix(BattleField bot)
+        private void AddInfoOnMyMatrix(BattleField bot)
         {
 
             // Живие коробли
@@ -887,16 +1037,16 @@ namespace SeaBattleWinForms
                 {
                     if (ships[ship].decks[deck].Alive == true)
                     {
-                        myField[ships[ship].decks[deck].x, ships[ship].decks[deck].y] = (int)eStatus.reserved;
+                        myField[ships[ship].decks[deck].X, ships[ship].decks[deck].Y] = (int)eStatus.reserved;
                     }
                 }
             }
 
 
             //Попадания
-            for (int x = 0; x < SizeX; x++)
+            for (int x = 0; x < SIZE_X; x++)
             {
-                for (int y = 0; y < SizeY; y++)
+                for (int y = 0; y < SIZE_Y; y++)
                 {
                     if (bot.myShot[x, y] == true)
                     {
@@ -913,18 +1063,18 @@ namespace SeaBattleWinForms
                 {
                     if (ships[ship].decks[deck].Alive == false)
                     {
-                        myField[ships[ship].decks[deck].x, ships[ship].decks[deck].y] = (int)eStatus.destroyed;
+                        myField[ships[ship].decks[deck].X, ships[ship].decks[deck].Y] = (int)eStatus.destroyed;
                     }
                 }
             }
 
         }
-        private void AddFullOnEnemyMatrix(BattleField bot)
+        private void AddInfoOnEnemyMatrix(BattleField bot)
         {
             //Попадания
-            for (int x = 0; x < SizeX; x++)
+            for (int x = 0; x < SIZE_X; x++)
             {
-                for (int y = 0; y < SizeY; y++)
+                for (int y = 0; y < SIZE_Y; y++)
                 {
                     if (myShot[x, y] == true)
                     {
@@ -940,33 +1090,57 @@ namespace SeaBattleWinForms
                 {
                     if (bot.ships[ship].decks[deck].Alive == false)
                     {
-                        enemyField[bot.ships[ship].decks[deck].x, bot.ships[ship].decks[deck].y] = (int)eStatus.destroyed;
+                        enemyField[bot.ships[ship].decks[deck].X, bot.ships[ship].decks[deck].Y] = (int)eStatus.destroyed;
                     }
                 }
             }
         }
+        private void AddAliveShipsOnMatrix()
+        {
+            //Clear matrix
+            for (int x = 0; x < SIZE_X; x++)
+            {
+                for (int y = 0; y < SIZE_Y; y++)
+                {
+                    myShipsField[x, y] = false;
+                }
+            }
 
+            // Живие коробли
+            for (int ship = 0; ship < ships.Length; ship++)
+            {
+                for (int deck = 0; deck < ships[ship].decks.Length; deck++)
+                {
+                    int x = ships[ship].decks[deck].X;
+                    int y = ships[ship].decks[deck].Y;
+
+                    myShipsField[x, y] = true;
+                }
+            }
+        }
+
+        //Вернути матрици с кораблями
+        public int[,] GetMyField(BattleField bot) { AddInfoOnMyMatrix(bot); return myField; }
+        public int[,] GetEnemyField(BattleField bot) { AddInfoOnEnemyMatrix(bot); return enemyField; }
+        public bool[,] GetMyShips() { AddAliveShipsOnMatrix(); return myShipsField; }
 
 
 
         //ADD reserve coordinate
-        private void AddReserveCordinate(int x, int y)
+        private void AddReserveCordinate(ref bool[,] reserved, int x, int y)
         {
             if (!(x < 10 && x >= 0 && y < 10 && y >= 0)) { return; }
 
             reserved[x, y] = true;
         }
-
         //Check reserve coordinate
-        private bool CheckReserveCordinate(int x, int y)
+        private bool CheckReserveCordinate(ref bool[,] reserved, int x, int y)
         {
             if (!(x < 10 && x >= 0 && y < 10 && y >= 0)) { return false; }
 
             if (reserved[x, y] == true) { return false; }
             else { return true; }
         }
-
-
 
 
 
@@ -1010,7 +1184,7 @@ namespace SeaBattleWinForms
                     if (bot.ships[ship].decks[deck].Alive == false) { continue; }
 
                     // hit
-                    if (x == bot.ships[ship].decks[deck].x && y == bot.ships[ship].decks[deck].y)
+                    if (x == bot.ships[ship].decks[deck].X && y == bot.ships[ship].decks[deck].Y)
                     {
                         bot.ships[ship].decks[deck].Alive = false;
 
@@ -1046,7 +1220,7 @@ namespace SeaBattleWinForms
                 {
                     if (bot.ships[ship].decks[deck].Alive == false) { continue; }
 
-                    if (myShot[bot.ships[ship].decks[deck].x, bot.ships[ship].decks[deck].y] == true)
+                    if (myShot[bot.ships[ship].decks[deck].X, bot.ships[ship].decks[deck].Y] == true)
                     {
                         bot.ships[ship].decks[deck].Alive = false;
                     }
@@ -1081,26 +1255,26 @@ namespace SeaBattleWinForms
         // Добавить простреляние кординати корабля у бота
         private void AddShotCoordinatesShip(BattleField bot, int currShip)
         {
-            for (int i = 0; i < ships[currShip].decks.Length; i++)
+            for (int i = 0; i < bot.ships[currShip].decks.Length; i++)
             {
                 // вспомогательние координати
-                AddUsingCoordinate(bot.ships[currShip].decks[i].x, bot.ships[currShip].decks[i].y);
+                AddUsingCoordinate(bot.ships[currShip].decks[i].X, bot.ships[currShip].decks[i].Y);
 
-                AddUsingCoordinate(bot.ships[currShip].decks[i].x + 1, bot.ships[currShip].decks[i].y);
+                AddUsingCoordinate(bot.ships[currShip].decks[i].X + 1, bot.ships[currShip].decks[i].Y);
 
-                AddUsingCoordinate(bot.ships[currShip].decks[i].x - 1, bot.ships[currShip].decks[i].y);
+                AddUsingCoordinate(bot.ships[currShip].decks[i].X - 1, bot.ships[currShip].decks[i].Y);
 
-                AddUsingCoordinate(bot.ships[currShip].decks[i].x, bot.ships[currShip].decks[i].y + 1);
+                AddUsingCoordinate(bot.ships[currShip].decks[i].X, bot.ships[currShip].decks[i].Y + 1);
 
-                AddUsingCoordinate(bot.ships[currShip].decks[i].x, bot.ships[currShip].decks[i].y - 1);
+                AddUsingCoordinate(bot.ships[currShip].decks[i].X, bot.ships[currShip].decks[i].Y - 1);
 
-                AddUsingCoordinate(bot.ships[currShip].decks[i].x + 1, bot.ships[currShip].decks[i].y + 1);
+                AddUsingCoordinate(bot.ships[currShip].decks[i].X + 1, bot.ships[currShip].decks[i].Y + 1);
 
-                AddUsingCoordinate(bot.ships[currShip].decks[i].x + 1, bot.ships[currShip].decks[i].y - 1);
+                AddUsingCoordinate(bot.ships[currShip].decks[i].X + 1, bot.ships[currShip].decks[i].Y - 1);
 
-                AddUsingCoordinate(bot.ships[currShip].decks[i].x - 1, bot.ships[currShip].decks[i].y + 1);
+                AddUsingCoordinate(bot.ships[currShip].decks[i].X - 1, bot.ships[currShip].decks[i].Y + 1);
 
-                AddUsingCoordinate(bot.ships[currShip].decks[i].x - 1, bot.ships[currShip].decks[i].y - 1);
+                AddUsingCoordinate(bot.ships[currShip].decks[i].X - 1, bot.ships[currShip].decks[i].Y - 1);
             }
         }
 

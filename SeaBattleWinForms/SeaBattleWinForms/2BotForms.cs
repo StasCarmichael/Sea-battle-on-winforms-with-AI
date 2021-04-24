@@ -3,10 +3,9 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
-using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Windows.Forms;
+using SeaBattleExtention;
 
 
 
@@ -17,10 +16,20 @@ namespace SeaBattleWinForms
         const int SIZE = 10;
         const int squareSize = 38;
 
+        const int FREEZETIME = 500;
+
         public BotForms()
         {
             InitializeComponent();
+
+            myFieldDelegate = new MyDelegat(UpdateFieldMyField);
+            enemyFieldDelegate = new MyDelegat(UpdateFieldEnemyField);
         }
+
+
+        delegate void MyDelegat();
+        MyDelegat myFieldDelegate;
+        MyDelegat enemyFieldDelegate;
 
 
         Button[,] myField;
@@ -28,8 +37,6 @@ namespace SeaBattleWinForms
 
 
         Thread mainThread;
-        Thread myThread1;
-        Thread myThread2;
 
 
         void CreateField(ref Button[,] thisField, int startX, int startY)
@@ -91,32 +98,22 @@ namespace SeaBattleWinForms
         //Service Method
         private void UpdateFieldMyField()
         {
-            while (true)
+            for (int i = 0; i < SIZE; i++)
             {
-                for (int i = 0; i < SIZE; i++)
+                for (int j = 0; j < SIZE; j++)
                 {
-                    for (int j = 0; j < SIZE; j++)
-                    {
-                        myField[i, j].Update();
-                    }
+                    myField[i, j].Update();
                 }
-
-                Thread.Sleep(100);
             }
         }
-        private void UpdateFieldEnymyField()
+        private void UpdateFieldEnemyField()
         {
-            while (true)
+            for (int i = 0; i < SIZE; i++)
             {
-                for (int i = 0; i < SIZE; i++)
+                for (int j = 0; j < SIZE; j++)
                 {
-                    for (int j = 0; j < SIZE; j++)
-                    {
-                        enemyField[i, j].Update();
-                    }
+                    enemyField[i, j].Update();
                 }
-
-                Thread.Sleep(100);
             }
         }
 
@@ -129,15 +126,7 @@ namespace SeaBattleWinForms
         //Battle Method
         private void BattleBot()
         {
-            const int FREEZETIME = 750;
-
-            myThread1 = new Thread(new ThreadStart(UpdateFieldMyField));
-            myThread2 = new Thread(new ThreadStart(UpdateFieldEnymyField));
-
-            myThread1.Start();
-            myThread2.Start();
-
-
+ 
             #region Battle
 
             while (!(chuck.Win || morgan.Win))
@@ -153,6 +142,10 @@ namespace SeaBattleWinForms
                 }
 
 
+                this.Invoke(myFieldDelegate);
+                this.Invoke(enemyFieldDelegate);
+
+
                 //Вистрел Чака по Моргану
                 while (chuck.ShotBot(morgan, FREEZETIME))
                 {
@@ -161,6 +154,10 @@ namespace SeaBattleWinForms
 
                     //корабли и вистрели моргана
                     morgan.DrawMyField(chuck, enemyField);
+
+
+                    this.Invoke(myFieldDelegate);
+                    this.Invoke(enemyFieldDelegate);
                 }
 
 
@@ -172,6 +169,9 @@ namespace SeaBattleWinForms
                     //корабли и вистрели моргана
                     morgan.DrawMyField(chuck, enemyField);
                 }
+
+                this.Invoke(myFieldDelegate);
+                this.Invoke(enemyFieldDelegate);
 
 
                 ////////Fix Bug
@@ -187,6 +187,10 @@ namespace SeaBattleWinForms
 
                     //корабли и вистрели моргана
                     morgan.DrawMyField(chuck, enemyField);
+
+
+                    this.Invoke(myFieldDelegate);
+                    this.Invoke(enemyFieldDelegate);
                 }
 
 
@@ -198,13 +202,12 @@ namespace SeaBattleWinForms
                     //корабли и вистрели моргана
                     morgan.DrawMyField(chuck, enemyField);
                 }
+
+                this.Invoke(myFieldDelegate);
+                this.Invoke(enemyFieldDelegate);
             }
 
-            #endregion
-
-
-            myThread1.Abort();
-            myThread2.Abort();
+        #endregion
 
 
         //Виводим результат стражения
@@ -219,8 +222,8 @@ namespace SeaBattleWinForms
             chuck = new BattleField();
             morgan = new BattleField();
 
-            chuck.Placement();
-            morgan.Placement();
+            chuck.AutoPlacement();
+            morgan.AutoPlacement();
 
 
             CreateField(ref myField, 80, 60);
@@ -245,9 +248,6 @@ namespace SeaBattleWinForms
         }
         private void button3_Click(object sender, EventArgs e)
         {
-            if (myThread1 != null) { if (myThread1.IsAlive) { myThread1.Abort(); } };
-            if (myThread2 != null) { if (myThread2.IsAlive) { myThread2.Abort(); } };
-
             if (mainThread != null) { if (mainThread.IsAlive) { mainThread.Abort(); } };
 
             mainForm mainForm = new mainForm();
@@ -256,9 +256,6 @@ namespace SeaBattleWinForms
         }
         private void button4_Click(object sender, EventArgs e)
         {
-            if (myThread1 != null) { if (myThread1.IsAlive) { myThread1.Abort(); } };
-            if (myThread2 != null) { if (myThread2.IsAlive) { myThread2.Abort(); } };
-
             if (mainThread != null) { if (mainThread.IsAlive) { mainThread.Abort(); } };
 
             Application.Exit();

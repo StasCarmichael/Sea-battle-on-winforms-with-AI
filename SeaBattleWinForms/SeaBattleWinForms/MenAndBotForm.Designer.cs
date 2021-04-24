@@ -37,6 +37,9 @@ namespace SeaBattleWinForms
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.button5 = new System.Windows.Forms.Button();
+            this.buttonManPlacement = new System.Windows.Forms.Button();
+            this.buttonStartManPlacment = new System.Windows.Forms.Button();
+            this.buttonClear = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // button4
@@ -67,7 +70,7 @@ namespace SeaBattleWinForms
             // 
             this.button2.BackColor = System.Drawing.Color.Lime;
             this.button2.Font = new System.Drawing.Font("Century Gothic", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.button2.Location = new System.Drawing.Point(319, 556);
+            this.button2.Location = new System.Drawing.Point(528, 556);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(160, 96);
             this.button2.TabIndex = 5;
@@ -121,12 +124,53 @@ namespace SeaBattleWinForms
             this.button5.Visible = false;
             this.button5.Click += new System.EventHandler(this.button5_Click);
             // 
+            // buttonManPlacement
+            // 
+            this.buttonManPlacement.BackColor = System.Drawing.Color.RoyalBlue;
+            this.buttonManPlacement.Font = new System.Drawing.Font("Century Gothic", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.buttonManPlacement.Location = new System.Drawing.Point(302, 556);
+            this.buttonManPlacement.Name = "buttonManPlacement";
+            this.buttonManPlacement.Size = new System.Drawing.Size(160, 96);
+            this.buttonManPlacement.TabIndex = 11;
+            this.buttonManPlacement.Text = "Розстановка";
+            this.buttonManPlacement.UseVisualStyleBackColor = false;
+            this.buttonManPlacement.Click += new System.EventHandler(this.buttonManPlacement_Click);
+            // 
+            // buttonStartManPlacment
+            // 
+            this.buttonStartManPlacment.BackColor = System.Drawing.Color.LawnGreen;
+            this.buttonStartManPlacment.Font = new System.Drawing.Font("Century Gothic", 20.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.buttonStartManPlacment.Location = new System.Drawing.Point(520, 313);
+            this.buttonStartManPlacment.Name = "buttonStartManPlacment";
+            this.buttonStartManPlacment.Size = new System.Drawing.Size(180, 100);
+            this.buttonStartManPlacment.TabIndex = 12;
+            this.buttonStartManPlacment.Text = "Розставити";
+            this.buttonStartManPlacment.UseVisualStyleBackColor = false;
+            this.buttonStartManPlacment.Visible = false;
+            this.buttonStartManPlacment.Click += new System.EventHandler(this.buttonStartManPlacment_Click);
+            // 
+            // buttonClear
+            // 
+            this.buttonClear.BackColor = System.Drawing.Color.Firebrick;
+            this.buttonClear.Font = new System.Drawing.Font("Century Gothic", 20.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.buttonClear.Location = new System.Drawing.Point(520, 194);
+            this.buttonClear.Name = "buttonClear";
+            this.buttonClear.Size = new System.Drawing.Size(180, 100);
+            this.buttonClear.TabIndex = 13;
+            this.buttonClear.Text = "Очистити";
+            this.buttonClear.UseVisualStyleBackColor = false;
+            this.buttonClear.Visible = false;
+            this.buttonClear.Click += new System.EventHandler(this.buttonClear_Click);
+            // 
             // MenAndBotForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.ActiveCaption;
             this.ClientSize = new System.Drawing.Size(1200, 700);
+            this.Controls.Add(this.buttonClear);
+            this.Controls.Add(this.buttonStartManPlacment);
+            this.Controls.Add(this.buttonManPlacement);
             this.Controls.Add(this.button5);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
@@ -156,5 +200,8 @@ namespace SeaBattleWinForms
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Button button5;
+        private System.Windows.Forms.Button buttonManPlacement;
+        private System.Windows.Forms.Button buttonStartManPlacment;
+        private System.Windows.Forms.Button buttonClear;
     }
 }

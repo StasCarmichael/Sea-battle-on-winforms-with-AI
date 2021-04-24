@@ -68,6 +68,7 @@
     <Compile Include="MenAndBotForm.Designer.cs">
       <DependentUpon>MenAndBotForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="MyExtension.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="2BotForms.resx">
