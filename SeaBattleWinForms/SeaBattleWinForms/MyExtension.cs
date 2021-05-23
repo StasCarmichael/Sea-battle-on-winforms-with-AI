@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using SeaBattleWinForms;
 using System.Windows.Forms;
 using System.Drawing;

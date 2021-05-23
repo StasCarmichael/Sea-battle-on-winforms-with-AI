@@ -33,7 +33,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>com.byril.seabattle2_512x512.ico</ApplicationIcon>
+    <ApplicationIcon>Resources\com.byril.seabattle2_512x512.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -50,34 +50,34 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BattleField.cs" />
-    <Compile Include="2BotForms.cs">
+    <Compile Include="UI\2BotForms.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="2BotForms.Designer.cs">
+    <Compile Include="UI\2BotForms.Designer.cs">
       <DependentUpon>2BotForms.cs</DependentUpon>
     </Compile>
-    <Compile Include="mainForm.cs">
+    <Compile Include="UI\mainForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="mainForm.Designer.cs">
+    <Compile Include="UI\mainForm.Designer.cs">
       <DependentUpon>mainForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="MenAndBotForm.cs">
+    <Compile Include="UI\MenAndBotForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="MenAndBotForm.Designer.cs">
+    <Compile Include="UI\MenAndBotForm.Designer.cs">
       <DependentUpon>MenAndBotForm.cs</DependentUpon>
     </Compile>
     <Compile Include="MyExtension.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <EmbeddedResource Include="2BotForms.resx">
+    <EmbeddedResource Include="UI\2BotForms.resx">
       <DependentUpon>2BotForms.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="mainForm.resx">
+    <EmbeddedResource Include="UI\mainForm.resx">
       <DependentUpon>mainForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="MenAndBotForm.resx">
+    <EmbeddedResource Include="UI\MenAndBotForm.resx">
       <DependentUpon>MenAndBotForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
@@ -107,7 +107,7 @@
     <None Include="Resources\SI_DSiWare_SeaBattle_image1600w.jpg" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="com.byril.seabattle2_512x512.ico" />
+    <Content Include="Resources\com.byril.seabattle2_512x512.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
