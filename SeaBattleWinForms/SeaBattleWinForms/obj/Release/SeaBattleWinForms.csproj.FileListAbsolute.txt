@@ -1,4 +1,3 @@
-C:\Users\stask\source\WinForms\SeaBattleWinForms\SeaBattleWinForms\obj\Release\SeaBattleWinForms.csprojAssemblyReference.cache
 C:\Users\stask\source\WinForms\SeaBattleWinForms\SeaBattleWinForms\obj\Release\SeaBattleWinForms.BotForms.resources
 C:\Users\stask\source\WinForms\SeaBattleWinForms\SeaBattleWinForms\obj\Release\SeaBattleWinForms.mainForm.resources
 C:\Users\stask\source\WinForms\SeaBattleWinForms\SeaBattleWinForms\obj\Release\SeaBattleWinForms.MenAndBotForm.resources
@@ -10,3 +9,4 @@ C:\Users\stask\source\WinForms\SeaBattleWinForms\SeaBattleWinForms\bin\Release\S
 C:\Users\stask\source\WinForms\SeaBattleWinForms\SeaBattleWinForms\bin\Release\Sea Battle WinForms.pdb
 C:\Users\stask\source\WinForms\SeaBattleWinForms\SeaBattleWinForms\obj\Release\Sea Battle WinForms.exe
 C:\Users\stask\source\WinForms\SeaBattleWinForms\SeaBattleWinForms\obj\Release\Sea Battle WinForms.pdb
+C:\Users\stask\source\WinForms\SeaBattleWinForms\SeaBattleWinForms\obj\Release\SeaBattleWinForms.csproj.AssemblyReference.cache

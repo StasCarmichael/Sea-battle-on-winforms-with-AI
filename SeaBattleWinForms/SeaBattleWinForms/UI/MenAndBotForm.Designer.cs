@@ -33,7 +33,7 @@ namespace SeaBattleWinForms
             this.buttonExit = new System.Windows.Forms.Button();
             this.button3 = new System.Windows.Forms.Button();
             this.button2 = new System.Windows.Forms.Button();
-            this.button1 = new System.Windows.Forms.Button();
+            this.buttonAutoPlacment = new System.Windows.Forms.Button();
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.buttonRestart = new System.Windows.Forms.Button();
@@ -79,17 +79,17 @@ namespace SeaBattleWinForms
             this.button2.Visible = false;
             this.button2.Click += new System.EventHandler(this.button2_Click);
             // 
-            // button1
+            // buttonAutoPlacment
             // 
-            this.button1.BackColor = System.Drawing.Color.RoyalBlue;
-            this.button1.Font = new System.Drawing.Font("Century Gothic", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.button1.Location = new System.Drawing.Point(79, 556);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(160, 96);
-            this.button1.TabIndex = 4;
-            this.button1.Text = "Авто Розстановка";
-            this.button1.UseVisualStyleBackColor = false;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
+            this.buttonAutoPlacment.BackColor = System.Drawing.Color.RoyalBlue;
+            this.buttonAutoPlacment.Font = new System.Drawing.Font("Century Gothic", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.buttonAutoPlacment.Location = new System.Drawing.Point(79, 556);
+            this.buttonAutoPlacment.Name = "buttonAutoPlacment";
+            this.buttonAutoPlacment.Size = new System.Drawing.Size(160, 96);
+            this.buttonAutoPlacment.TabIndex = 4;
+            this.buttonAutoPlacment.Text = "Авто Розстановка";
+            this.buttonAutoPlacment.UseVisualStyleBackColor = false;
+            this.buttonAutoPlacment.Click += new System.EventHandler(this.buttonAutoPlacment_Click);
             // 
             // label2
             // 
@@ -177,7 +177,7 @@ namespace SeaBattleWinForms
             this.Controls.Add(this.buttonExit);
             this.Controls.Add(this.button3);
             this.Controls.Add(this.button2);
-            this.Controls.Add(this.button1);
+            this.Controls.Add(this.buttonAutoPlacment);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximumSize = new System.Drawing.Size(1200, 700);
@@ -196,7 +196,7 @@ namespace SeaBattleWinForms
         private System.Windows.Forms.Button buttonExit;
         private System.Windows.Forms.Button button3;
         private System.Windows.Forms.Button button2;
-        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Button buttonAutoPlacment;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Button buttonRestart;

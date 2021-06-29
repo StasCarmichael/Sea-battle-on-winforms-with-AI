@@ -76,7 +76,7 @@ namespace SeaBattleWinForms
             // 
             // pictureBox1
             // 
-            this.pictureBox1.Image = global::SeaBattleWinForms.Properties.Resources.SI_DSiWare_SeaBattle_image1600w;
+            this.pictureBox1.Image = global::SeaBattleWinForms.Properties.Resources.SeaBattle_image;
             this.pictureBox1.Location = new System.Drawing.Point(242, 12);
             this.pictureBox1.Name = "pictureBox1";
             this.pictureBox1.Size = new System.Drawing.Size(433, 183);

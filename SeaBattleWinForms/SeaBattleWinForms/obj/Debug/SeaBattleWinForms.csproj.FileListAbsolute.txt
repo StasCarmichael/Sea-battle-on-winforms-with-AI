@@ -1,4 +1,3 @@
-C:\Users\stask\source\WinForms\SeaBattleWinForms\SeaBattleWinForms\obj\Debug\SeaBattleWinForms.csprojAssemblyReference.cache
 C:\Users\stask\source\WinForms\SeaBattleWinForms\SeaBattleWinForms\obj\Debug\SeaBattleWinForms.Properties.Resources.resources
 C:\Users\stask\source\WinForms\SeaBattleWinForms\SeaBattleWinForms\obj\Debug\SeaBattleWinForms.csproj.GenerateResource.cache
 C:\Users\stask\source\WinForms\SeaBattleWinForms\SeaBattleWinForms\obj\Debug\SeaBattleWinForms.csproj.CoreCompileInputs.cache
@@ -10,3 +9,4 @@ C:\Users\stask\source\WinForms\SeaBattleWinForms\SeaBattleWinForms\bin\Debug\Sea
 C:\Users\stask\source\WinForms\SeaBattleWinForms\SeaBattleWinForms\bin\Debug\Sea Battle WinForms.pdb
 C:\Users\stask\source\WinForms\SeaBattleWinForms\SeaBattleWinForms\obj\Debug\Sea Battle WinForms.exe
 C:\Users\stask\source\WinForms\SeaBattleWinForms\SeaBattleWinForms\obj\Debug\Sea Battle WinForms.pdb
+C:\Users\stask\source\WinForms\SeaBattleWinForms\SeaBattleWinForms\obj\Debug\SeaBattleWinForms.csproj.AssemblyReference.cache

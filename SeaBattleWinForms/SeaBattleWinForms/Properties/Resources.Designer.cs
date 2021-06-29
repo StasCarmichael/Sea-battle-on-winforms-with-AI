@@ -63,9 +63,9 @@ namespace SeaBattleWinForms.Properties {
         /// <summary>
         ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap SI_DSiWare_SeaBattle_image1600w {
+        internal static System.Drawing.Bitmap SeaBattle_image {
             get {
-                object obj = ResourceManager.GetObject("SI_DSiWare_SeaBattle_image1600w", resourceCulture);
+                object obj = ResourceManager.GetObject("SeaBattle_image", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

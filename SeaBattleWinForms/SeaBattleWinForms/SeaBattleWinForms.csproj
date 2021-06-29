@@ -33,7 +33,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>Resources\com.byril.seabattle2_512x512.ico</ApplicationIcon>
+    <ApplicationIcon>Resources\icon.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -49,7 +49,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BattleField.cs" />
+    <Compile Include="Logic\BattleField.cs" />
     <Compile Include="UI\2BotForms.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -68,7 +68,7 @@
     <Compile Include="UI\MenAndBotForm.Designer.cs">
       <DependentUpon>MenAndBotForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="MyExtension.cs" />
+    <Compile Include="WinFormsExtension\WinFormsExtension.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="UI\2BotForms.resx">
@@ -104,10 +104,10 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\SI_DSiWare_SeaBattle_image1600w.jpg" />
+    <None Include="Resources\SeaBattle_image.jpg" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Resources\com.byril.seabattle2_512x512.ico" />
+    <Content Include="Resources\icon.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

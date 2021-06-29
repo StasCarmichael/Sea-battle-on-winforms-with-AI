@@ -1,9 +1,8 @@
 ﻿using System;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
 using System.Windows.Forms;
-using SeaBattleExtention;
+using SeaBattleWinForms.Extension;
+using SeaBattleWinForms.Logic;
 
 namespace SeaBattleWinForms
 {
@@ -13,7 +12,7 @@ namespace SeaBattleWinForms
 
         const int FIELD_SIZE = 10;
         const int SQUARE_SIZE = 38;
-        const int FREEZE_TIME = 500;
+        const int FREEZE_TIME = 400;
 
 
         const int START_X = 80;
@@ -26,7 +25,6 @@ namespace SeaBattleWinForms
 
 
         bool start = false;
-        byte locked = 0;
 
 
         public MenAndBotForm(MainForm _mainForm)
@@ -106,6 +104,8 @@ namespace SeaBattleWinForms
             }
 
         }
+
+
         void ClearField(ref Button[,] thisField)
         {
             for (int i = 0; i < thisField.GetLength(0); i++)
@@ -182,18 +182,12 @@ namespace SeaBattleWinForms
         //Обработчик собитий на кнопку
         public void DetectShip(object sender, EventArgs e)
         {
-            locked++;
 
             Button pressedButton = sender as Button;
 
             if (start)
             {
-                if (locked != 1)
-                {
-                    locked--;
-                    return;
-                }
-                else if (!(bot.Win || player.Win))
+                if (!(bot.Win || player.Win))
                 {
                     int x = ((pressedButton.Location.X - (START_X + DIFFERENCE_BETWEEN_FIELD)) / SQUARE_SIZE) - 1;
                     int y = ((pressedButton.Location.Y - START_Y) / SQUARE_SIZE) - 1;
@@ -251,8 +245,6 @@ namespace SeaBattleWinForms
                     buttonRestart.Visible = true;
                 }
 
-
-                locked--;
             }
         }
         public void PlacementShip(object sender, EventArgs e)
@@ -304,7 +296,7 @@ namespace SeaBattleWinForms
         }
 
 
-        private void button1_Click(object sender, EventArgs e)
+        private void buttonAutoPlacment_Click(object sender, EventArgs e)
         {
             if (placementField != null) { VisibleField(ref placementField); placementField = null; }
             buttonManPlacement.Visible = false;
@@ -319,7 +311,7 @@ namespace SeaBattleWinForms
 
             UnLockField(ref enemyField);
 
-            button1.Visible = false;
+            buttonAutoPlacment.Visible = false;
             button2.Visible = false;
 
             start = true;
@@ -341,7 +333,7 @@ namespace SeaBattleWinForms
             player = new BattleField();
 
 
-            button1.Visible = true;
+            buttonAutoPlacment.Visible = true;
 
 
             ClearField(ref myField);
@@ -372,11 +364,11 @@ namespace SeaBattleWinForms
         {
             player = new BattleField();
 
-            if (player.HumanPlacement(ref placementField, DETECTION_COLOR))
+            if (player.HumanPlacementWinForms(ref placementField, DETECTION_COLOR))
             {
                 buttonClear.Visible = false;
                 buttonStartManPlacment.Visible = false;
-                button1.Visible = false;
+                buttonAutoPlacment.Visible = false;
 
 
                 if (myField == null) { CreateField(out myField, DetectShip, START_X, START_Y); }

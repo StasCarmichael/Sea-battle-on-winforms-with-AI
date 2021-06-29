@@ -1,9 +1,9 @@
 ﻿using System;
-using System.Data;
 using System.Drawing;
 using System.Threading;
 using System.Windows.Forms;
-using SeaBattleExtention;
+using SeaBattleWinForms.Extension;
+using SeaBattleWinForms.Logic;
 
 
 
@@ -71,7 +71,7 @@ namespace SeaBattleWinForms
 
 
         //Поток игри
-        Thread mainThread;
+        Thread gameThread;
 
 
         void CreateField(ref Button[,] thisField, int startX, int startY)
@@ -252,12 +252,12 @@ namespace SeaBattleWinForms
         {
             buttonStart.Visible = false;
 
-            mainThread = new Thread(new ThreadStart(BattleBot));
-            mainThread.Start();
+            gameThread = new Thread(new ThreadStart(BattleBot));
+            gameThread.Start();
         }
         private void buttonClose_Click(object sender, EventArgs e)
         {
-            if (mainThread != null) { if (mainThread.IsAlive) { mainThread.Abort(); } };
+            if (gameThread != null) { if (gameThread.IsAlive) { gameThread.Abort(); } };
 
             mainForm.Show();
 
@@ -267,7 +267,7 @@ namespace SeaBattleWinForms
         }
         private void buttonExit_Click(object sender, EventArgs e)
         {
-            if (mainThread != null) { if (mainThread.IsAlive) { mainThread.Abort(); } };
+            if (gameThread != null) { if (gameThread.IsAlive) { gameThread.Abort(); } };
 
             Application.Exit();
         }
